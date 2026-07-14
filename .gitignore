@@ -1,0 +1,6 @@
+.DS_Store
+.ipynb_checkpoints/
+.claude/settings.local.json
+data/usajobs_occ_series_raw.json
+__pycache__/
+*.pyc
