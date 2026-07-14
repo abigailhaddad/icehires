@@ -60,6 +60,7 @@ def run():
           SELECT personnel_action_effective_date_yyyymm AS event_ym,
                  agency_subelement_code AS agy_code, agency_subelement AS agency,
                  separation_category, separation_category_code,
+                 drp_indicator,
                  pay_plan, pay_plan_code,
                  occupational_series, occupational_series_code, occupational_category,
                  grade, age_bracket, length_of_service_years, work_schedule,

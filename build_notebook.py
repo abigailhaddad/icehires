@@ -270,14 +270,13 @@ print(f"CBP annual new hires — prior peak: {int(arc.CBP.loc[:2024].max()):,} i
 ''')
 
 md(r'''
-**This is unlike anything in ICE's history.** ICE's previous *annual* record was about 1,966 new hires
-(2009); 2025's ~10,300 is roughly **5× ICE's all-time record and 8× its recent norm**. Notably, the
+**2025 is the biggest hiring year in ICE's record.** ICE's previous *annual* record was about 1,966 new
+hires (2009); 2025's ~10,300 is roughly **5× ICE's all-time record and 8× its recent norm**. Notably, the
 **2017 executive order that directed hiring 10,000 more ICE officers produced no visible surge** —
 ICE hiring stayed at 700–1,300 a year through 2020. The only thing in this data that *looks* like 2025
 is **CBP in 2007–2009**, when the Bush-era Border Patrol buildup drove 7,000–9,000 hires a year. So the
-2025 ICE surge is doing what CBP did fifteen years earlier — and, as §4b shows, those rapid CBP buildups
-are exactly the ones that historically lose a quarter or more of new hires early. ICE is now running the
-same experiment for the first time, at record scale.
+2025 ICE surge resembles CBP's 2007–2009 buildup, at a larger scale; such rapid buildups have
+historically lost a quarter or more of new hires early (§4b).
 ''')
 
 md(r'''
@@ -312,11 +311,12 @@ print(f"ICE change since the Jan 2026 peak: {latest-int(peak.ICE):+,} ({(latest/
 
 md(r'''
 The surge **did** reach the rolls: ICE headcount jumps from about 20,850 (Aug 2025) to a peak of
-**30,461 in Jan 2026** — a ~46% expansion in five months. But it is **already shrinking** — by the latest
-month ICE is back to about 29,200, having *lost* roughly 1,200 people (~4%) since the peak, even though
-some hiring continued. CBP grows slowly and steadily, with no reversal. Sections 3–4 show the shrinkage
-is the surge hires themselves walking back out. (Headcount and the hires-minus-departures flow don't
-match exactly — a data-quirk covered in caveat 4 of §5, not part of the staffing story.)
+**30,461 in Jan 2026** — a ~46% expansion in five months. It has since **edged down** — by the latest
+month ICE is at about 29,200, down roughly 1,200 (~4%) from the peak, even though some hiring continued.
+That is a modest slip so far, and ICE remains well above its pre-surge level; but it is a decline, and
+Sections 3–4 show it is the surge hires themselves leaving. CBP grows slowly and steadily, with no
+reversal. (Headcount and the hires-minus-departures flow don't match exactly — a data quirk covered in
+caveat 4 of §5, not part of the staffing story.)
 ''')
 
 md(r'''
@@ -359,13 +359,6 @@ for c in ["occupational_series_code","pay_plan_code"]:
     display(show(fp_df, pct=["% of surge","% of 2024"]))
 ''')
 
-code(r'''
-# Location: can we place these hires? (The scan's most striking result.)
-display(Markdown("**Work location (duty state)**"))
-display(show(fingerprint("duty_state").rename(columns={"duty_state": "Work location"}),
-            pct=["% of surge","% of 2024"]))
-''')
-
 md(r'''
 **Reading the profile:**
 
@@ -375,11 +368,8 @@ md(r'''
   covers about 87% of the surge.
 - **Pay plan `GL`** (the entry law-enforcement officer pay plan) is about 68% of surge hires versus 33%
   normally (**2.1×**), at grades **GL-05/07/09**.
-- Two secondary tells: an unusual share of **term (non-permanent) appointments** (**3.0×**), and an
+- Two secondary markers: an unusual share of **term (non-permanent) appointments** (**3.0×**), and an
   **older age mix** (the 50–59 brackets run 1.5–2.8× normal) — atypical for entry-level law-enforcement.
-- **Location is a dead end — and that itself is a finding.** Work location is **REDACTED for about 98%**
-  of surge hires (OPM hides the work location of ICE law-enforcement staff), so we cannot profile by
-  place. The redaction only reconfirms these are law-enforcement officers.
 
 So we define the surge hires as **pay plan `GL` + job series 1801/1811**. Almost no one at ICE held those
 jobs before the surge, so any jump in departures from them is, by construction, the surge hires — **and
@@ -504,7 +494,7 @@ ax.set(title="Share of the ICE surge hires who have already left (any length of 
        ylabel="Departures ÷ hires, running total"); date_x(ax); fig.tight_layout()
 final = cohort.iloc[-1]
 print(f"By {ym_label(final.event_ym)}: {int(final.cum_exits):,} of {int(final.cum_hires):,} surge hires have left "
-      f"= {final.pct_of_cohort_exited}% — within their first ~5-8 months, and still climbing.")
+      f"= {final.pct_of_cohort_exited}% — all within their first year, and still climbing.")
 ''')
 
 md(r'''
@@ -516,9 +506,10 @@ The natural comparison is **CBP's entry law-enforcement officers**: Border Patro
 Same DHS enforcement mission, same entry grades, same academy onboarding — but hired in volume every
 year, so they have a normal early-departure track record.
 
-Is ~25% in a few months a lot? We can't answer that with an ICE *first-year* rate — the cohort is only
-~5–8 months old, so its first year isn't finished, and annualizing a partial year would mislead. What we
-*can* compute is the **completed** first-year rate for a genuinely similar group: **CBP's entry
+Is ~25% in a few months a lot? We can't answer that with an ICE *first-year* rate — these hires arrived
+Sep 2025 – Jan 2026, so by May 2026 they have been on the job only a few months, well short of a full
+year, and annualizing a partial year would mislead. What we *can* compute is the **completed** first-year
+rate for a genuinely similar group: **CBP's entry
 law-enforcement officers** — Border Patrol Agents (series 1896, GL) and CBP Officers (series 1895). Same
 DHS enforcement mission, same entry grades, same academy onboarding, but hired in volume every year, so
 their cohorts have each had a full year or more to play out. Those give honest full-year benchmarks to
@@ -539,8 +530,8 @@ def first_year_rate(agy, fp_, y0, y1):
     """).iloc[0]
     return int(d.hires), int(d.exits_lt1yr), d.first_yr_sep_pct
 
-# No ICE row on purpose: with only ~5-8 months elapsed, an ICE first-year rate isn't computable yet.
-# ICE's observed loss so far (~25% in 5-8 months, chart above) is compared to these completed full-year
+# No ICE row on purpose: these hires are only a few months into their first year, so an ICE first-year
+# rate isn't computable yet. ICE's observed loss so far (~25%, chart above) is compared to these full-year
 # CBP benchmarks by horizon, in words, below.
 rows = [
   ("CBP Border Patrol (1896 GL) — 2023-24 classes", "HSBD", "pay_plan_code='GL' AND occupational_series_code='1896'", "2023","2024"),
@@ -554,18 +545,17 @@ display(show(cbp.rename(columns={"group":"CBP entry law-enforcement group","new_
                                  "exits_under_1yr":"Left within first year","first_yr_sep_%":"First-year rate"}),
              pct=["First-year rate"]))
 print(f"ICE surge hires so far (chart above): {int(final.cum_exits):,} of {int(final.cum_hires):,} left "
-      f"= {final.pct_of_cohort_exited}% in only ~5-8 months — first year not yet complete, so not shown as a rate.")
+      f"= {final.pct_of_cohort_exited}% — before their first year is complete, so not shown as a rate.")
 ''')
 
 md(r'''
-**The verdict.** We can't state an ICE *first-year* rate — the cohort's first year isn't over (only
-~5–8 months have passed), and annualizing a partial year would mislead. What we can say: ICE has
-**already lost about 25%** in those 5–8 months. For a full-year reference, CBP's comparable entry classes
+**The verdict.** We can't state an ICE *first-year* rate — the cohort's first year isn't over (these
+hires are only a few months in), and annualizing a partial year would mislead. What we can say: ICE has
+**already lost about 25%** before that first year is up. For a full-year reference, CBP's comparable entry classes
 lose about **10–11% over a whole year** in normal times, and even CBP's roughest rapid-hire cohort —
 Border Patrol in **2019–21** — lost about **29% over a whole year**. So in well under a year ICE has
-already passed CBP's steady-state full-year loss and is closing on its worst surge on record. The point
-isn't that ICE is uniquely bad — rapid enforcement hiring reliably sheds a lot of new hires early — but
-that the 2025 ICE cohort is tracking the bad end of that history, with months still to run.
+already passed CBP's steady-state full-year loss and is closing on CBP's own worst rapid-hire surge —
+near the high end of that range, not beyond it, with its first year not yet complete.
 ''')
 
 md(r'''
@@ -576,13 +566,13 @@ md(r'''
 - The 2025 DHS surge was **overwhelmingly ICE** (about 8× normal ICE hiring; CBP barely above trend),
   concentrated in **Sep 2025 – Jan 2026** and in **entry law-enforcement jobs** (pay plan GL, series
   1801/1811, grades 05/07/09).
-- It **reached the rolls** — ICE headcount grew about 46% (20.9k → 30.5k) — but the **peak was
-  short-lived**; ICE has lost about 1,200 people (~4%) since Jan 2026.
+- It **reached the rolls** — ICE headcount grew about 46% (20.9k → 30.5k) — and has since **slipped
+  modestly**, about 1,200 (~4%) off the January peak, still declining as the cohort leaves.
 - The shrinkage is the **surge hires themselves**, identified by job, pay plan, and grade (not length of
   service). Departures from those jobs went from ~30/year to ~1,000 in five months; **about 71% are
   voluntary quits**, about 26% involuntary terminations, the small remainder transfers and retirements.
-- Early loss is **about 25% within roughly 5–8 months** — before the cohort's first year is even complete,
-  so we don't state it as a first-year rate. For reference, CBP's comparable entry classes shed ~10–11%
+- Early loss is **about 25% before the cohort's first year is even complete**, so we don't state it as a
+  first-year rate. For reference, CBP's comparable entry classes shed ~10–11%
   over a *full* year normally and ~29% in their 2019–21 rapid-hire surge; ICE is already near the high end
   of that range with months still to run.
 
@@ -609,12 +599,27 @@ md(r'''
    unaffected.
 6. **Term vs. cause.** "Termination (expired appointment / other)" mixes term-appointment expirations
    with any for-cause removals; the ~26% involuntary slice can't be split further.
-7. **Redaction** hides work location for ~98% of these hires (no geography), but hides the *value* rather
-   than dropping the person — headcount and job totals lose no one (§0).
-8. **Not a buyout artifact.** The 2025 government-wide deferred-resignation/early-out programs hit
-   *senior* incumbents (visible as elevated *retirements* elsewhere in ICE); the surge hires came
-   afterward and show 71% quits with essentially no retirements, so their departures aren't a buyout
-   effect.
+7. **Redaction preserves totals.** The most-masked field (work location, ~98% of these hires) is
+   relabeled, not dropped, so headcount and job totals lose no one (§0).
+8. **Not a buyout artifact.** A direct check of the separations `drp_indicator` field (table below)
+   flags **0 of the 1,733 cohort departures** — and 0 of all ~3,450 ICE departures in this window — as
+   deferred-resignation-program exits. The cohort's attrition is ordinary quits and appointment endings,
+   not the 2025 government-wide buyout.
+''')
+
+md(r'''
+**Buyout check (caveat 8).** Surge-cohort departures by the separations `drp_indicator` flag — none are
+deferred-resignation-program exits.
+''')
+
+code(r'''
+drp = q(f"""
+  SELECT COALESCE(drp_indicator,'(blank)') AS drp_indicator, SUM(count) AS departures
+  FROM '{SEP}' WHERE agy_code='{surge.ICE}' AND {fp} AND event_ym>='202509'
+  GROUP BY 1 ORDER BY departures DESC
+""")
+show(drp.rename(columns={"drp_indicator":"DRP flag (Y = deferred-resignation program)",
+                         "departures":"Cohort departures"}))
 ''')
 
 md(r'''
