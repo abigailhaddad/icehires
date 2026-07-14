@@ -106,7 +106,7 @@ data**, because a wrong number here would spread everywhere. Each check runs liv
 | 1 | ICE = code `HSBB`, CBP = `HSBD`, the same in every year and not split across other codes | wrong or shifting codes would corrupt the baseline | ✅ Check 1 (2018–2026) |
 | 2 | Each monthly file adds new actions; to get a per-month series you **sum across all files and group by the effective-date field** (`personnel_action_effective_date_yyyymm`; headcount uses `snapshot_yyyymm`) | if files instead re-stated the whole history, summing would double-count | ✅ Check 2 — and necessary |
 | 3 | The recent headcount drop is real, not just late reporting | the whole "people are leaving" story depends on it | ✅ Check 3 (headcount snapshots) |
-| 4 | The surge hires can be identified by **pay plan `GL` + job series 1801/1811**, groups that were nearly empty before the surge | lets us attribute departures to the surge without relying on length of service | ✅ shown in §3 (~900 before the surge; ~68% of hires) |
+| 4 | The surge hires can be identified by **pay plan `GL` + job series 1801/1811**, groups that were nearly empty before the surge | lets us attribute departures to the surge without relying on length of service | ✅ ~68% of hires (§3); the cells held ~1,500 before the surge, small next to the ~7,000 hired in |
 | 5 | Redaction hides a *value* (e.g. work location) but keeps the person in the totals | otherwise agency counts would be undercounts | ✅ Check 4 |
 | 6 | The surge is genuinely new hires, not people transferred in from other agencies | changes what "net new officers" means | ✅ Check 4 (transfers = 0.4%) |
 
@@ -192,7 +192,8 @@ With the method checked out, the findings follow.
 ## 1. How big was the surge?
 
 New hires per calendar year, by agency. We count only genuine new hires (the "NEW HIRE" category),
-which excludes transfers in from other agencies — those are handled separately in §5.
+which excludes transfers in from other agencies — those are handled separately in §5. (2026 is a partial
+year, through May.)
 ''')
 
 code(r'''
@@ -207,8 +208,8 @@ show(by_year.rename(columns={"year": "Year", "ice_new_hires": "ICE new hires",
 ''')
 
 md(r'''
-ICE normally hires roughly 700–1,300 people a year. **In 2025 it hired 10,322 — about 8× normal.**
-CBP's 2025 increase is small (about 1.2× its own baseline). So the surge is overwhelmingly an **ICE**
+ICE normally hires roughly 700–1,350 people a year. **In 2025 it hired 10,322 — about 8× normal.**
+CBP's 2025 increase is small (about 1.2× its 2024 level). So the surge is overwhelmingly an **ICE**
 event. The monthly view shows *when* it happened.
 ''')
 
@@ -273,10 +274,10 @@ md(r'''
 **2025 is the biggest hiring year in ICE's record.** ICE's previous *annual* record was about 1,966 new
 hires (2009); 2025's ~10,300 is roughly **5× ICE's all-time record and 8× its recent norm**. Notably, the
 **2017 executive order that directed hiring 10,000 more ICE officers produced no visible surge** —
-ICE hiring stayed at 700–1,300 a year through 2020. The only thing in this data that *looks* like 2025
+ICE hiring stayed near 700–1,300 a year through 2020. The only thing in this data that *looks* like 2025
 is **CBP in 2007–2009**, when the Bush-era Border Patrol buildup drove 7,000–9,000 hires a year. So the
-2025 ICE surge resembles CBP's 2007–2009 buildup, at a larger scale; such rapid buildups have
-historically lost a quarter or more of new hires early (§4b).
+2025 ICE surge resembles CBP's 2007–2009 buildup, at a larger scale; and CBP's most recent rapid
+entry-officer push, in 2019–21, lost nearly 30% of new hires within the first year (§4b).
 ''')
 
 md(r'''
@@ -397,7 +398,7 @@ show(fp_sep_year.rename(columns={"year":"Year","fp_separations":"Departures",
 md(r'''
 Departures from these jobs were a **flat 27–46 per year from 2018 through 2024**. They jump to **730 in
 2025** and **1,058 in just the first five months of 2026** — a yearly pace around 2,500, roughly
-**50–60× the pre-surge norm**. The exits begin the same month the hiring does (Oct 2025). The monthly
+**50–60× the pre-surge norm**. The exits begin the same month the hiring does (Sep 2025). The monthly
 picture, next to hiring, is in the chart further down.
 ''')
 
@@ -461,7 +462,7 @@ display(show(comp_disp))
 ''')
 
 md(r'''
-A wall of hiring in **Oct 2025 – Jan 2026**, then hiring falls off a cliff while departures stay
+A wall of hiring in **Sep 2025 – Jan 2026**, then hiring falls off a cliff while departures stay
 elevated — so from about Feb 2026 the group **shrinks every month**. That is the mechanism behind the
 headcount reversal in §2.
 ''')
@@ -471,7 +472,7 @@ md(r'''
 
 Because these jobs were nearly empty before the surge, we can watch the **whole group's** departures pile
 up against its own hires — a running early-departure rate that does **not** depend on length of service
-(so it also captures the ~1/3 of surge hires who had prior federal experience).
+(so it also captures the ~30% of surge hires who had prior federal experience).
 ''')
 
 code(r'''
@@ -498,23 +499,18 @@ print(f"By {ym_label(final.event_ym)}: {int(final.cum_exits):,} of {int(final.cu
 ''')
 
 md(r'''
-About **one in four** surge hires (~25%; roughly 1,700 of ~7,000) has already left within about 0–8
-months, and the share climbs every month because hiring stopped while departures continue. Is that
-unusual? We need a **genuinely similar group** — not the ~900 pre-surge ICE officers, which is too small.
-The natural comparison is **CBP's entry law-enforcement officers**: Border Patrol Agents (series 1896,
-*Border Patrol Enforcement*, pay plan GL) and CBP Officers (series 1895, *Customs and Border Protection*).
-Same DHS enforcement mission, same entry grades, same academy onboarding — but hired in volume every
-year, so they have a normal early-departure track record.
+About **one in four** surge hires (~25%; roughly 1,700 of ~7,000) has already left, and the share climbs
+every month because hiring stopped while departures continue.
 
-Is ~25% in a few months a lot? We can't answer that with an ICE *first-year* rate — these hires arrived
-Sep 2025 – Jan 2026, so by May 2026 they have been on the job only a few months, well short of a full
-year, and annualizing a partial year would mislead. What we *can* compute is the **completed** first-year
-rate for a genuinely similar group: **CBP's entry
-law-enforcement officers** — Border Patrol Agents (series 1896, GL) and CBP Officers (series 1895). Same
-DHS enforcement mission, same entry grades, same academy onboarding, but hired in volume every year, so
-their cohorts have each had a full year or more to play out. Those give honest full-year benchmarks to
-hold ICE's partial-year loss against — a comparison of *horizons*, not rate-against-rate. (The CBP
-measure: departures with under a year of service ÷ new-entrant hires.)
+Is that a lot? We can't answer with an ICE *first-year* rate — these hires arrived Sep 2025 – Jan 2026,
+so by May 2026 they have been on the job only a few months, well short of a full year, and annualizing a
+partial year would mislead. What we *can* compute is the **completed** first-year rate for a genuinely
+similar group: **CBP's entry law-enforcement officers** — Border Patrol Agents (series 1896,
+*Border Patrol Enforcement*, GL) and CBP Officers (series 1895, *Customs and Border Protection*). Same DHS
+enforcement mission, same entry grades, same academy onboarding, but hired in volume every year, so their
+cohorts have each had a full year or more to play out. Those give honest full-year benchmarks to hold
+ICE's partial-year loss against — a comparison of *horizons*, not rate-against-rate. (The CBP measure:
+departures with under a year of service ÷ new-entrant hires.)
 ''')
 
 code(r'''
@@ -563,14 +559,15 @@ md(r'''
 
 **What the data supports:**
 
-- The 2025 DHS surge was **overwhelmingly ICE** (about 8× normal ICE hiring; CBP barely above trend),
+- The 2025 DHS surge was **overwhelmingly ICE** (about 8× normal ICE hiring; CBP modestly above trend),
   concentrated in **Sep 2025 – Jan 2026** and in **entry law-enforcement jobs** (pay plan GL, series
   1801/1811, grades 05/07/09).
 - It **reached the rolls** — ICE headcount grew about 46% (20.9k → 30.5k) — and has since **slipped
   modestly**, about 1,200 (~4%) off the January peak, still declining as the cohort leaves.
 - The shrinkage is the **surge hires themselves**, identified by job, pay plan, and grade (not length of
   service). Departures from those jobs went from ~30/year to ~1,000 in five months; **about 71% are
-  voluntary quits**, about 26% involuntary terminations, the small remainder transfers and retirements.
+  voluntary quits**, about 26% involuntary terminations, the small remainder other separations, transfers,
+  and retirements.
 - Early loss is **about 25% before the cohort's first year is even complete**, so we don't state it as a
   first-year rate. For reference, CBP's comparable entry classes shed ~10–11%
   over a *full* year normally and ~29% in their 2019–21 rapid-hire surge; ICE is already near the high end
@@ -580,7 +577,8 @@ md(r'''
 
 1. **Counts, not people.** Records are personnel actions, not tracked individuals; we match *departing*
    jobs to *hiring* jobs. We can't prove a given leaver was a specific fall-2025 hire — the match is
-   tight only because ICE had almost no one in these entry jobs before the surge (~900).
+   tight only because ICE had few people in these entry jobs before the surge (~1,500 in Aug 2025, small
+   next to the ~7,000 hired into them).
 2. **We track the ~68% we can.** The profile (GL, 1801/1811) covers about 68% of surge hires — the entry
    officers. The rest (GS officers and ~980 attorneys) sit in jobs that already had large standing
    populations, so their attrition can't be isolated the same way; the ~25% early-exit figure is for the
@@ -588,7 +586,7 @@ md(r'''
 3. **Length of service ≠ time in this job.** `length_of_service_years` is *total federal service*; about
    30% of 2025 ICE new hires arrived with 3+ years of prior service — a mix of **veterans**
    (military-service credit) and **prior federal civilians** (rehires), not transfers (those are 0.4%,
-   §0). A length-of-service-based cohort would misclassify roughly a third of them — exactly why we
+   §0). A length-of-service-based cohort would misclassify roughly 30% of them — exactly why we
    profile by job and grade instead.
 4. **Headcount and flow don't reconcile** (§2): the flow lags the headcount change by ~15–20%, so we use
    headcount for staffing levels and departures for exits, never chained. The "declining headcount"
@@ -657,7 +655,7 @@ show(prior.rename(columns={"prior_experience":"Prior federal service","n":"Peopl
 ''')
 
 md(r'''
-About a third of 2025 ICE "new hires" arrived with **3+ years of prior federal service** — rehires,
+About 30% of 2025 ICE "new hires" arrived with **3+ years of prior federal service** — rehires,
 conversions, and moves from other agencies entering as new appointments. This is exactly why the surge
 hires have to be identified by **the job they were hired into**, not by how long they've been on a
 federal payroll.
