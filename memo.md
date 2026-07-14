@@ -11,6 +11,8 @@
 ### 1. The surge was ICE, and it was big but brief · *notebook §1*
 ICE normally hires about 700–1,350 people a year. In **2025 it hired 10,322** — roughly **8× normal** — and the burst was tightly concentrated: about **9,970 hires fell in the five months Sept 2025–Jan 2026** alone, peaking in December, then falling back to normal monthly levels. It is about 99.6% genuine new hires, **not** transfers from other agencies (transfers = 0.4%). **CBP's increase was modest** (2025 was about 1.2× its 2024 level); its ramp is smaller, later, and Border-Patrol-focused.
 
+![Monthly new hires, ICE vs CBP — a sharp, brief ICE burst in Sept 2025–Jan 2026 (shaded); CBP barely moves.](figures/monthly_hires.png){width=6in}
+
 ### 1b. The biggest hiring year in ICE's history · *notebook §1b*
 Extending the series back to 2006, ICE's previous *annual* hiring record was about **1,966 (2009)**; 2025's 10,322 is about **5× ICE's all-time record and 8× its recent norm**. The **2017 executive order directing 10,000 new ICE officers produced no visible surge** — hiring stayed near 700–1,300/year. The only comparable buildup in this data is **CBP in 2007–2009** (about 7,000–9,000 hires/year, the Bush-era Border Patrol expansion); and CBP's most recent rapid entry-officer push, in 2019–21, lost nearly 30% of new hires within the first year (§4b).
 
@@ -25,6 +27,8 @@ Departures from these jobs ran a flat **27–46 per year (2018–2024)**, then j
 
 ### 4b. About one in four is already gone — before the first year is up · *notebook §4b*
 Watching the whole group's exits against its own hires, **1,733 of 7,033 surge hires (24.6%) had left by May 2026**, and still climbing because hiring stopped while exits continue. We can't yet state an ICE *first-year* rate: the group's first year isn't over (these hires are only a few months in), and annualizing a partial year would mislead. But that ~25% already exceeds what CBP's comparable entry classes shed over a **full** first year — about **10–11%** for **Border Patrol (series 1896-GL, *Border Patrol Enforcement*)** and **CBP Officer (series 1895, *Customs and Border Protection*)** in 2023–24 — and is closing on the roughly **29%** that CBP's own **2019–21** rapid-hire Border Patrol classes lost across a full year. ICE's early loss is already near the high end of that range, with its first year not yet complete.
+
+![Cumulative share of the ~7,000 entry-officer surge hires who had separated, by month — about one in four within the first year, and still climbing.](figures/cohort_exited.png){width=6in}
 
 ---
 
