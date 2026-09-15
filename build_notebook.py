@@ -502,9 +502,9 @@ md(r'''
 About **one in four** surge hires (~25%; roughly 1,700 of ~7,000) has already left, and the share climbs
 every month because hiring stopped while departures continue.
 
-Is that a lot? We can't answer with an ICE *first-year* rate — these hires arrived Sep 2025 – Jan 2026,
-so by May 2026 they have been on the job only a few months, well short of a full year, and annualizing a
-partial year would mislead. What we *can* compute is the **completed** first-year rate for a genuinely
+Is that a lot? We can't yet answer with an ICE *first-year* rate — these hires arrived Sep 2025 – Jan 2026,
+so by Jul 2026 the earliest of them have only about ten months on the job, still short of a full year for
+the cohort as a whole, and annualizing a partial year would mislead. What we *can* compute is the **completed** first-year rate for a genuinely
 similar group: **CBP's entry law-enforcement officers** — Border Patrol Agents (series 1896,
 *Border Patrol Enforcement*, GL) and CBP Officers (series 1895, *Customs and Border Protection*). Same DHS
 enforcement mission, same entry grades, same academy onboarding, but hired in volume every year, so their
@@ -663,7 +663,7 @@ federal payroll.
 ---
 *Source: OPM/EHRI hires, departures, and headcount via `impactproject/opm-ehri-data`; extract built by
 `src/extract.py`; the surge-hire definition and windows are in `src/surge.py`. ICE = HSBB, CBP = HSBD.
-Data through May 2026; the most recent 1–2 months are provisional.*
+Data through Jul 2026; the most recent 1–2 months are provisional.*
 ''')
 
 nb["cells"] = cells

@@ -22,12 +22,16 @@ NEW_HIRE = "accession_category LIKE 'NEW HIRE%'"
 # Windows. Event months are `personnel_action_effective_date_yyyymm`.
 BASELINE_YEARS = ("2018", "2024")   # pre-surge normal
 SURGE_WINDOW = ("202509", "202601")  # ICE burst: Sep 2025 - Jan 2026
-LATEST_MONTH = "202605"              # most recent data (provisional)
+LATEST_MONTH = "202607"              # most recent data (provisional; Aug 2026 not yet published by OPM as of 2026-09-15)
 
 
 def con():
     c = duckdb.connect()
     c.execute("SET enable_progress_bar=false;")
+    # Low thread count -> low HTTP concurrency. Without this, DuckDB's parallel scan
+    # fires many simultaneous requests at HF and reliably trips its rate limiter on
+    # a ~250-file, 3-table pull; a handful of sequential-ish connections doesn't.
+    c.execute("SET threads=3;")
     return c
 
 
