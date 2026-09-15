@@ -28,16 +28,21 @@ jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
   extracts themselves — git-ignored, rebuilt by `python src/extract.py`.
 
 ## Method
-OPM's monthly files are incremental — each one carries mostly that month's actions plus a trickle of
-late-reported earlier ones (December 2025, the peak surge month, was only ~30% complete in its own
-file). So a clean per-month series needs summing across every file and grouping by the date an action
-took effect, not by which file reported it — one file per month would undercount the surge badly.
-Redaction hides values like work location but keeps the person in the totals. ICE (`HSBB`) and CBP
-(`HSBD`) are the only matching agency codes, stable back to 2008 — lookalikes like USCIS (`HSAB`) and
-DOJ immigration courts (`DJ12`) are excluded. Surge hires are identified by job (pay plan `GL`, series
-1801/1811), not length of service, since service years mix genuine new hires with rehires and veterans
-carrying years of prior federal credit. All four of these are checked live against the data in the
-notebook's **§0**, not just asserted.
+Four choices this analysis leans on, each checked live against the data in the notebook's **§0** —
+not just asserted:
+
+- **Files add, they don't restate.** OPM's monthly files are incremental — each one carries mostly
+  that month's actions plus a trickle of late-reported earlier ones (December 2025, the peak surge
+  month, was only ~30% complete in its own file). A clean per-month series needs summing across every
+  file and grouping by the date an action took effect, not by which file reported it — one file per
+  month would badly undercount the surge.
+- **Agency codes are stable and exclusive.** ICE = `HSBB`, CBP = `HSBD`, unchanged back to 2008.
+  Lookalikes — USCIS (`HSAB`), DOJ immigration courts (`DJ12`) — are separate agencies and excluded.
+- **Redaction hides values, not people.** A masked field (like work location) is relabeled, not
+  dropped, so headcount and job totals still include everyone.
+- **Surge hires are identified by job, not length of service.** The profile is pay plan `GL` + job
+  series 1801/1811. Length of service can't do this cleanly — it mixes genuine new hires with rehires
+  and veterans who arrive carrying years of prior federal credit.
 
 ## Headline findings
 The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
