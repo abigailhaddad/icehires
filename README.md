@@ -28,7 +28,7 @@ jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
   extracts themselves — git-ignored, rebuilt by `python src/extract.py`.
 
 ## Method
-Four choices this analysis leans on, each checked live against the data in the notebook's **§0** —
+Five choices this analysis leans on, each checked live against the data in the notebook's **§0** —
 not just asserted:
 
 - **Files add, they don't restate.** OPM's monthly files are incremental — each one carries mostly
@@ -41,11 +41,15 @@ not just asserted:
 - **Redaction hides values, not people.** A masked field (like work location) is relabeled, not
   dropped, so headcount and job totals still include everyone.
 - **Surge hires are identified by job, not length of service.** The profile is pay plan `GL` + job
-  series 1801/1811 — jobs ICE had almost nobody in before the surge (~1,500 people, next to ~7,200
-  hired into them). So anyone who later leaves one of those jobs is, by construction, a surge hire;
-  we don't need to know how long they'd worked for the government. Length of service can't substitute
-  for this — it mixes genuine new hires with rehires and veterans who arrive carrying years of prior
-  federal credit, so filtering on it would misclassify a real chunk of the group.
+  series 1801/1811. Length of service can't do this cleanly — it mixes genuine new hires with rehires
+  and veterans who arrive carrying years of prior federal credit, so filtering on it would misclassify
+  a real chunk of the group.
+- **The departures we attribute to the surge cohort aren't mostly the ~1,500 people who already held
+  these jobs before the surge, just leaving at their normal pace.** We can't prove that outright — there
+  are no person IDs — but these jobs had a flat, low departure rate (27–46/year) for years before the
+  surge, even as their headcount tripled. If that pre-existing group kept leaving at that same rate
+  through the tracking window, it would explain only about 1–2% of what we count as surge-cohort
+  departures, even at the high end. The rest has to be the surge hires themselves.
 
 ## Headline findings
 The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
