@@ -12,7 +12,7 @@ are they staying? Built from OPM/EHRI records for hires, departures, and monthly
 ```bash
 pip install duckdb pandas matplotlib nbformat nbconvert jupyter
 python src/extract.py          # pull the ICE+CBP slice (2018→) -> data/*.parquet
-python src/history.py          # long-run 2006-2017 hiring + agency-code audit -> data/*.csv
+python src/history.py          # long-run 2006-2017 hiring + agency-code stability audit -> data/*.csv
 jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
 ```
 
@@ -30,11 +30,14 @@ stability, summing across monthly files by effective date, redaction preserving 
 new hires).
 
 ## Headline findings
-The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5× ICE's all-time prior peak of 1,966 in
+The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
 2009 — the 2017 "hire 10,000 officers" order produced nothing like it), concentrated in **Sept 2025–Jan
 2026** in **entry immigration-enforcement officer roles** (series 1801/1811, GL plan). ICE headcount grew
-~46% (20.9k→30.5k) then slipped ~4% by May 2026. The leavers are the surge hires themselves —
-identified by job, not length of service — and **~1 in 4 has already left, ~71% by
+~46% (20.9k→30.5k) then slipped ~5% by Jul 2026. The leavers are the surge hires themselves —
+identified by job, not length of service — and **more than 1 in 4 has already left, ~69% by
 voluntary quit** — before the cohort's first year is even up, already past what comparable CBP entry
 classes shed over a *full* year (~10–11%), and closing on CBP's worst rapid-hire surges (~29% in
 2019–21).
+
+![Monthly new hires, ICE vs CBP](figures/monthly_hires.png)
+![Share of the ICE surge hires who have already left](figures/cohort_exited.png)
