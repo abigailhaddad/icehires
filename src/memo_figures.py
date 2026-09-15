@@ -30,6 +30,10 @@ def date_x(ax):
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(loc))
 def end_dot(ax, x, y, color):
     ax.plot(x.iloc[-1], y.iloc[-1], "o", ms=7, color=color, markeredgecolor="white", markeredgewidth=1.5, zorder=5)
+def unit_label(ax, text):
+    # horizontal caption above the y-axis instead of matplotlib's default vertical ylabel --
+    # rotated axis text is unreadable at the small sizes LinkedIn/social renders images at
+    ax.text(0, 1.03, text, transform=ax.transAxes, fontsize=9.5, color="#666666", ha="left", va="bottom")
 
 # ---- Figure 1: monthly new hires, ICE vs CBP ----
 m = q(f"""
@@ -45,7 +49,8 @@ ax.axvspan(pd.Timestamp("2025-09-01"), pd.Timestamp("2026-01-31"), color=SPAN, a
 ax.plot(m.date, m.ICE, lw=2, color=C_ICE, label="ICE")
 ax.plot(m.date, m.CBP, lw=2, color=C_CBP, label="CBP")
 end_dot(ax, m.date, m.ICE, C_ICE); end_dot(ax, m.date, m.CBP, C_CBP)
-ax.set(title="Monthly new hires: ICE vs CBP", ylabel="New hires per month")
+ax.set_title("Monthly new hires: ICE vs CBP", pad=24)
+unit_label(ax, "New hires per month")
 comma_y(ax); date_x(ax); ax.legend(loc="upper left"); fig.tight_layout()
 fig.savefig(FIG / "monthly_hires.png"); plt.close(fig)
 
@@ -66,8 +71,9 @@ end_dot(ax, c.date, c.pct, C_EXIT)
 ax.annotate(f"{c.pct.iloc[-1]:.0f}%", (c.date.iloc[-1], c.pct.iloc[-1]), xytext=(-4, 12),
             textcoords="offset points", ha="right", fontsize=11, fontweight="bold", color="#333333")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=0))
-ax.set(title="Share of the ICE surge hires who have already left",
-       ylabel="Departures ÷ hires, running total"); date_x(ax); fig.tight_layout()
+ax.set_title("Share of the ICE surge hires who have already left", pad=24)
+unit_label(ax, "Departures / hires, running total")
+date_x(ax); fig.tight_layout()
 fig.savefig(FIG / "cohort_exited.png"); plt.close(fig)
 
 print("wrote", FIG / "monthly_hires.png", "and", FIG / "cohort_exited.png")
