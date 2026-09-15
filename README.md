@@ -28,7 +28,8 @@ jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
   extracts themselves — git-ignored, rebuilt by `python src/extract.py`.
 
 ## Method
-Five things this leans on, checked live in the notebook's **§0**:
+This analysis rests on five assumptions about the data, each verified directly against the raw files
+in the notebook's **§0**.
 
 - **Files add, they don't restate.** OPM's monthly files are incremental — each one is mostly that
   month's actions plus a trickle of late-reported earlier ones (December 2025, the peak surge month,
