@@ -25,9 +25,17 @@ jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
   (GL pay plan + job series 1801/1811), and the analysis windows.
 - `data/hf_file_map.json` — deduped max-version HuggingFace file list the extracts read from.
 
-Notebook **§0** documents and *checks* every load-bearing assumption before any findings (agency-code
-stability, summing across monthly files by effective date, redaction preserving totals, transfers vs.
-new hires).
+## Method
+OPM's monthly files are incremental — each one carries mostly that month's actions plus a trickle of
+late-reported earlier ones (December 2025, the peak surge month, was only ~30% complete in its own
+file). So a clean per-month series needs summing across every file and grouping by the date an action
+took effect, not by which file reported it — one file per month would undercount the surge badly.
+Redaction hides values like work location but keeps the person in the totals. ICE (`HSBB`) and CBP
+(`HSBD`) are the only matching agency codes, stable back to 2008 — lookalikes like USCIS (`HSAB`) and
+DOJ immigration courts (`DJ12`) are excluded. Surge hires are identified by job (pay plan `GL`, series
+1801/1811), not length of service, since service years mix genuine new hires with rehires and veterans
+carrying years of prior federal credit. All four of these are checked live against the data in the
+notebook's **§0**, not just asserted.
 
 ## Headline findings
 The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
