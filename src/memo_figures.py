@@ -14,9 +14,10 @@ con = surge.con()
 q = lambda s: con.execute(s).df()
 ACC, SEP = surge.ACC, surge.SEP
 
-C_ICE, C_CBP, C_EXIT, SPAN = "#2166ac", "#e08214", "#c0392b", "#fdd9a0"
+# dataviz skill validated categorical pair (slot 1 blue / slot 2 orange); C_EXIT is a lone series, no pairing constraint
+C_ICE, C_CBP, C_EXIT, SPAN = "#2a78d6", "#eb6834", "#c0392b", "#fdd9a0"
 plt.rcParams.update({
-    "figure.dpi": 150, "savefig.dpi": 150, "savefig.bbox": "tight", "font.size": 11,
+    "figure.dpi": 200, "savefig.dpi": 200, "savefig.bbox": "tight", "font.size": 11,
     "axes.spines.top": False, "axes.spines.right": False, "axes.edgecolor": "#bbbbbb",
     "axes.titlesize": 12, "axes.titleweight": "bold", "axes.titlepad": 10,
     "axes.labelcolor": "#444", "axes.labelsize": 10, "xtick.color": "#444", "ytick.color": "#444",
@@ -27,6 +28,8 @@ def comma_y(ax): ax.yaxis.set_major_formatter(mtick.FuncFormatter(lambda x, _: f
 def date_x(ax):
     loc = mdates.AutoDateLocator(); ax.xaxis.set_major_locator(loc)
     ax.xaxis.set_major_formatter(mdates.ConciseDateFormatter(loc))
+def end_dot(ax, x, y, color):
+    ax.plot(x.iloc[-1], y.iloc[-1], "o", ms=7, color=color, markeredgecolor="white", markeredgewidth=1.5, zorder=5)
 
 # ---- Figure 1: monthly new hires, ICE vs CBP ----
 m = q(f"""
@@ -39,8 +42,9 @@ m["date"] = pd.to_datetime(m.event_ym, format="%Y%m")
 fig, ax = plt.subplots(figsize=(8.5, 3.6))
 ax.axvspan(pd.Timestamp("2025-09-01"), pd.Timestamp("2026-01-31"), color=SPAN, alpha=.7, zorder=0,
            label="ICE surge window (Sep 2025 – Jan 2026)")
-ax.plot(m.date, m.ICE, marker="o", ms=4, lw=2, color=C_ICE, label="ICE")
-ax.plot(m.date, m.CBP, marker="o", ms=4, lw=2, color=C_CBP, label="CBP")
+ax.plot(m.date, m.ICE, lw=2, color=C_ICE, label="ICE")
+ax.plot(m.date, m.CBP, lw=2, color=C_CBP, label="CBP")
+end_dot(ax, m.date, m.ICE, C_ICE); end_dot(ax, m.date, m.CBP, C_CBP)
 ax.set(title="Monthly new hires: ICE vs CBP", ylabel="New hires per month")
 comma_y(ax); date_x(ax); ax.legend(loc="upper left"); fig.tight_layout()
 fig.savefig(FIG / "monthly_hires.png"); plt.close(fig)
@@ -57,7 +61,10 @@ c = q(f"""
 """)
 c["date"] = pd.to_datetime(c.event_ym, format="%Y%m")
 fig, ax = plt.subplots(figsize=(8.5, 3.4))
-ax.plot(c.date, c.pct, marker="o", ms=5, lw=2, color=C_EXIT)
+ax.plot(c.date, c.pct, lw=2, color=C_EXIT)
+end_dot(ax, c.date, c.pct, C_EXIT)
+ax.annotate(f"{c.pct.iloc[-1]:.0f}%", (c.date.iloc[-1], c.pct.iloc[-1]), xytext=(-4, 12),
+            textcoords="offset points", ha="right", fontsize=11, fontweight="bold", color="#333333")
 ax.yaxis.set_major_formatter(mtick.PercentFormatter(decimals=0))
 ax.set(title="Share of the ICE surge hires who have already left",
        ylabel="Departures ÷ hires, running total"); date_x(ax); fig.tight_layout()
