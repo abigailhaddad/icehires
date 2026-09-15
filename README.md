@@ -64,7 +64,10 @@ The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all
 Method for how we identify them), and **more than 1 in 4 has already left, ~69% by voluntary quit** —
 before the cohort's first year is even up, against this same job group's own ~7%-a-year normal rate
 before the surge, and already past what comparable CBP entry classes shed over a *full* year (~10–11%),
-closing on CBP's worst rapid-hire surges (~29% in 2019–21).
+closing on CBP's worst rapid-hire surges (~29% in 2019–21). It isn't just fast growth: CBP's own entry
+officer jobs also grew substantially over this same window (headcount roughly doubled) without a
+comparable spike in attrition — what's different about ICE is the shape of the growth, not the growth
+itself.
 
 ![Monthly new hires, ICE vs CBP](figures/monthly_hires.png)
 ![Share of the ICE surge hires who have already left](figures/cohort_exited.png)
