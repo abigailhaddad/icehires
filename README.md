@@ -45,10 +45,10 @@ in the notebook's **§0**.
   carrying years of prior federal credit, so it can't do this cleanly.
 - **The departures we attribute to the surge cohort aren't mostly the ~1,500 people who already held
   these jobs before the surge, just leaving at their normal pace.** We can't prove that outright — there
-  are no person IDs — but these jobs had a flat, low departure rate (27–46/year) for years before the
-  surge, even as their headcount tripled. If that pre-existing group kept leaving at that same rate
-  through the tracking window, it would explain only about 1–2% of what we count as surge-cohort
-  departures, even at the high end. The rest has to be the surge hires themselves.
+  are no person IDs — but this job group's own attrition rate in the two years before the surge (2023–24,
+  the years its headcount is large enough to trust) was about 7% a year. Applied to the group's actual
+  size going into the surge (1,511 people, Aug 2025), that's roughly 5% of what we count as surge-cohort
+  departures. The rest has to be the surge hires themselves.
 - **Headcount for this job slice fell more than hires-minus-departures explains** — down 1,822 since
   the January peak, vs. 738 accounted for by flow, a 59% gap (ICE overall has a smaller, 20% version
   of the same gap). Checked and ruled out: promotion into GS-paid roles, a mass-transfer recoding
@@ -62,8 +62,9 @@ The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all
 2026** in **entry immigration-enforcement officer roles** (series 1801/1811, GL plan). ICE headcount grew
 ~46% (20.9k→30.5k) then slipped ~5% by Jul 2026. The leavers are the surge hires themselves (see
 Method for how we identify them), and **more than 1 in 4 has already left, ~69% by voluntary quit** —
-before the cohort's first year is even up, already past what comparable CBP entry classes shed over a
-*full* year (~10–11%), and closing on CBP's worst rapid-hire surges (~29% in 2019–21).
+before the cohort's first year is even up, against this same job group's own ~7%-a-year normal rate
+before the surge, and already past what comparable CBP entry classes shed over a *full* year (~10–11%),
+closing on CBP's worst rapid-hire surges (~29% in 2019–21).
 
 ![Monthly new hires, ICE vs CBP](figures/monthly_hires.png)
 ![Share of the ICE surge hires who have already left](figures/cohort_exited.png)
