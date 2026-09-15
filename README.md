@@ -28,7 +28,7 @@ jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
   extracts themselves — git-ignored, rebuilt by `python src/extract.py`.
 
 ## Method
-This analysis rests on five assumptions about the data, each verified directly against the raw files
+This analysis rests on six assumptions about the data, each verified directly against the raw files
 in the notebook's **§0**.
 
 - **Files add, they don't restate.** OPM's monthly files are incremental — each one is mostly that
@@ -49,6 +49,12 @@ in the notebook's **§0**.
   surge, even as their headcount tripled. If that pre-existing group kept leaving at that same rate
   through the tracking window, it would explain only about 1–2% of what we count as surge-cohort
   departures, even at the high end. The rest has to be the surge hires themselves.
+- **Headcount for this job slice fell more than hires-minus-departures explains** — down 1,822 since
+  the January peak, vs. 738 accounted for by flow, a 59% gap (ICE overall has a smaller, 20% version
+  of the same gap). Checked and ruled out: promotion into GS-paid roles, a mass-transfer recoding
+  event, reclassification to another pay plan. The decline is broad across every age bracket and
+  grade, not concentrated in a small cell, so it isn't people dropping out of the data. The mechanism
+  for the rest is unresolved — but nothing found points toward the departure count being too high.
 
 ## Headline findings
 The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
