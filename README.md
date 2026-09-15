@@ -23,7 +23,9 @@ jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
   audit (`data/ice_cbp_hires_history.csv`, `data/agency_code_audit.csv`).
 - `src/surge.py` — shared constants: ICE=`HSBB`, CBP=`HSBD`, the surge-hire profile
   (GL pay plan + job series 1801/1811), and the analysis windows.
-- `data/hf_file_map.json` — deduped max-version HuggingFace file list the extracts read from.
+- `data/hf_file_map.json` — deduped max-version HuggingFace file list the extracts read from (committed;
+  `src/extract.py` and `src/history.py` read it but don't regenerate it). `data/*.parquet` are the
+  extracts themselves — git-ignored, rebuilt by `python src/extract.py`.
 
 ## Method
 OPM's monthly files are incremental — each one carries mostly that month's actions plus a trickle of
@@ -41,11 +43,10 @@ notebook's **§0**, not just asserted.
 The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
 2009 — the 2017 "hire 10,000 officers" order produced nothing like it), concentrated in **Sept 2025–Jan
 2026** in **entry immigration-enforcement officer roles** (series 1801/1811, GL plan). ICE headcount grew
-~46% (20.9k→30.5k) then slipped ~5% by Jul 2026. The leavers are the surge hires themselves —
-identified by job, not length of service — and **more than 1 in 4 has already left, ~69% by
-voluntary quit** — before the cohort's first year is even up, already past what comparable CBP entry
-classes shed over a *full* year (~10–11%), and closing on CBP's worst rapid-hire surges (~29% in
-2019–21).
+~46% (20.9k→30.5k) then slipped ~5% by Jul 2026. The leavers are the surge hires themselves (see
+Method for how we identify them), and **more than 1 in 4 has already left, ~69% by voluntary quit** —
+before the cohort's first year is even up, already past what comparable CBP entry classes shed over a
+*full* year (~10–11%), and closing on CBP's worst rapid-hire surges (~29% in 2019–21).
 
 ![Monthly new hires, ICE vs CBP](figures/monthly_hires.png)
 ![Share of the ICE surge hires who have already left](figures/cohort_exited.png)

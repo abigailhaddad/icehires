@@ -2,5 +2,10 @@
 .ipynb_checkpoints/
 .claude/settings.local.json
 data/usajobs_occ_series_raw.json
+data/acc_ice_cbp.parquet
+data/sep_ice_cbp.parquet
+data/emp_ice_cbp.parquet
 __pycache__/
 *.pyc
+*.pdf
+*.docx
