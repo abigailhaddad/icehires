@@ -55,6 +55,15 @@ in the notebook's **§0**.
   event, reclassification to another pay plan. The decline is broad across every age bracket and
   grade, not concentrated in a small cell, so it isn't people dropping out of the data. The mechanism
   for the rest is unresolved — but nothing found points toward the departure count being too high.
+- **A higher base-group attrition rate doesn't erase the headline number.** The bound above assumes
+  the ~1,500 pre-existing job holders kept leaving at their flat 2023-24 rate (~7%/year). Triple that
+  rate to ~21%/year — never seen in this job group — and the cohort-exit figure only drops a few
+  points. It would take a ~143%/year rate, more than the whole group leaving, to explain all tracked
+  departures without any surge-hire exits at all.
+- **This job group's own separations land later than a typical month.** Only ~52% of its eventual
+  departures show up in the event month's own file, versus ~99% for a typical ICE+CBP separation.
+  Projecting that lag onto the still-thin recent months puts current attrition closer to ~31% than the
+  raw ~28% figure quoted below — if anything, that makes the headline number too low, not too high.
 
 ## Headline findings
 The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
