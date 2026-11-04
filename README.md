@@ -4,79 +4,92 @@ Did the 2025 DHS hiring surge — especially at ICE and CBP — actually put off
 are they staying? Built from OPM/EHRI records for hires, departures, and monthly headcount
 (`impactproject/opm-ehri-data` on HuggingFace), read directly with DuckDB.
 
+No findings or counts are written in this README. Every number lives in the notebooks (which compute it
+from the data) and in `memo.md`; this file only says what the analysis does and how to rerun it.
+
 ## Deliverables
 - **`dhs_hiring_surge.ipynb`** — the analysis, start to finish (charts + tables inline).
-- **`memo.md`** — one-page memo, every figure cross-referenced to a notebook section.
+- **`memo.md`** — short memo; each figure is cross-referenced to a notebook section.
+- **`attrition_screen.ipynb`** — follow-up: is ICE's rookie-attrition problem happening anywhere
+  else? Checks FBI specifically, then screens every federal agency subelement using the same
+  under-1-year-tenure signal. See its own intro cell for the method and caveats.
 
 ## Reproduce
 ```bash
-pip install duckdb pandas matplotlib nbformat nbconvert jupyter
-python src/extract.py          # pull the ICE+CBP slice (2018→) -> data/*.parquet
-python src/history.py          # long-run 2006-2017 hiring + agency-code stability audit -> data/*.csv
+pip install duckdb pandas matplotlib nbformat nbconvert jupyter huggingface_hub
+python src/extract.py          # pull the ICE+CBP slice -> data/*.parquet
+python src/history.py          # long-run hiring history + agency-code stability audit -> data/*.csv
+python src/extract_screen.py   # FBI slice + government-wide under-1yr screen -> data/*.parquet
 jupyter nbconvert --to notebook --execute --inplace dhs_hiring_surge.ipynb
+jupyter nbconvert --to notebook --execute --inplace attrition_screen.ipynb
 ```
+When OPM publishes a new month, refresh `data/hf_file_map.json`, rerun the extracts, then re-execute
+the notebooks. The analysis windows and latest month are constants in `src/surge.py`.
 
 ## Layout
-- `src/extract.py` — DuckDB query over the HuggingFace parquet; caches a small ICE+CBP
-  extract to `data/` (hires & departures 2018→, headcount 2022→).
-- `src/history.py` — pulls 2006–2017 ICE/CBP new-hire history and a reproducible agency-code stability
-  audit (`data/ice_cbp_hires_history.csv`, `data/agency_code_audit.csv`).
+- `src/extract.py` — DuckDB query over the HuggingFace parquet; caches a small ICE+CBP extract to `data/`
+  (hires, departures, headcount; the start months are set in the script).
+- `src/history.py` — long-run ICE/CBP new-hire history and a reproducible agency-code stability audit
+  (`data/ice_cbp_hires_history.csv`, `data/agency_code_audit.csv`).
 - `src/surge.py` — shared constants: ICE=`HSBB`, CBP=`HSBD`, the surge-hire profile
   (GL pay plan + job series 1801/1811), and the analysis windows.
+- `src/extract_screen.py` / `src/screen.py` — the FBI (job series 1811) slice and a government-wide,
+  all-agency, under-1-year-tenure screen for `attrition_screen.ipynb`.
 - `data/hf_file_map.json` — deduped max-version HuggingFace file list the extracts read from (committed;
   `src/extract.py` and `src/history.py` read it but don't regenerate it). `data/*.parquet` are the
-  extracts themselves — git-ignored, rebuilt by `python src/extract.py`.
+  extracts themselves — git-ignored, rebuilt by the extract scripts.
 
 ## Method
-This analysis rests on six assumptions about the data, each verified directly against the raw files
-in the notebook's **§0**.
+The analysis rests on a handful of assumptions about the data. Each is tested against the raw files in
+the notebook's **§0**, which prints the result; none of those results are repeated here.
 
-- **Files add, they don't restate.** OPM's monthly files are incremental — each one is mostly that
-  month's actions plus a trickle of late-reported earlier ones (December 2025, the peak surge month,
-  was only ~30% complete in its own file). A clean per-month series means summing across every file
-  and grouping by when the action took effect, not by which file reported it — one file per month
-  would badly undercount the surge.
-- **Agency codes are stable and exclusive.** ICE = `HSBB`, CBP = `HSBD`, unchanged back to 2008.
-  Lookalikes — USCIS (`HSAB`), DOJ immigration courts (`DJ12`) — are separate agencies and excluded.
-- **Redaction hides values, not people.** A masked field (like work location) is relabeled, not
-  dropped, so headcount and job totals still include everyone.
+- **Files add, they don't restate.** OPM's monthly files are incremental: each is mostly that month's
+  actions plus a trickle of late-reported earlier ones. A clean per-month series therefore means summing
+  across every file and grouping by when the action took effect, not by which file reported it. One file
+  per month would undercount, most severely for the peak surge months.
+- **Agency codes are stable and exclusive.** ICE = `HSBB`, CBP = `HSBD`. Lookalikes — USCIS (`HSAB`),
+  DOJ immigration courts (`DJ12`) — are separate agencies and excluded. The code-stability audit is in
+  `data/agency_code_audit.csv`.
+- **Redaction hides values, not people.** A masked field (like work location) is relabeled, not dropped,
+  so headcount and job totals still include everyone.
 - **Surge hires are identified by job, not length of service.** The profile is pay plan `GL` + job
   series 1801/1811. Length of service mixes genuine new hires with rehires and veterans who arrive
-  carrying years of prior federal credit, so it can't do this cleanly.
-- **The departures we attribute to the surge cohort aren't mostly the ~1,500 people who already held
-  these jobs before the surge, just leaving at their normal pace.** We can't prove that outright — there
-  are no person IDs — but this job group's own attrition rate in the two years before the surge (2023–24,
-  the years its headcount is large enough to trust) was about 7% a year. Applied to the group's actual
-  size going into the surge (1,511 people, Aug 2025), that's roughly 5% of what we count as surge-cohort
-  departures. The rest has to be the surge hires themselves.
-- **Headcount for this job slice fell more than hires-minus-departures explains** — down 1,822 since
-  the January peak, vs. 738 accounted for by flow, a 59% gap (ICE overall has a smaller, 20% version
-  of the same gap). Checked and ruled out: promotion into GS-paid roles, a mass-transfer recoding
-  event, reclassification to another pay plan. The decline is broad across every age bracket and
-  grade, not concentrated in a small cell, so it isn't people dropping out of the data. The mechanism
-  for the rest is unresolved — but nothing found points toward the departure count being too high.
-- **A higher base-group attrition rate doesn't erase the headline number.** The bound above assumes
-  the ~1,500 pre-existing job holders kept leaving at their flat 2023-24 rate (~7%/year). Triple that
-  rate to ~21%/year — never seen in this job group — and the cohort-exit figure only drops a few
-  points. It would take a ~143%/year rate, more than the whole group leaving, to explain all tracked
-  departures without any surge-hire exits at all.
-- **This job group's own separations land later than a typical month.** Only ~52% of its eventual
-  departures show up in the event month's own file, versus ~99% for a typical ICE+CBP separation.
-  Projecting that lag onto the still-thin recent months puts current attrition closer to ~31% than the
-  raw ~28% figure quoted below — if anything, that makes the headline number too low, not too high.
+  carrying prior federal credit, so it can't do this cleanly.
+- **Departures attributed to the surge cohort are mostly the surge hires, not long-time job holders
+  leaving at their normal pace.** There are no person IDs, so this can't be proven outright. The notebook
+  bounds it by applying this job group's own pre-surge attrition rate to the group's size going into the
+  surge, and stress-tests that rate at several multiples.
+- **Headcount and flow don't fully reconcile.** For this job slice, headcount fell by more than hires
+  minus departures explains. The notebook rules out promotion into GS-paid roles, a mass-transfer
+  recoding, and reclassification to another pay plan, and checks that the decline is broad across age
+  and grade. The mechanism for the remainder is unresolved. Headcount is used for levels and
+  departures for exits; the two are never chained.
+- **This job group's separations can land later than a typical month's.** The notebook measures what
+  share of eventual departures appear in the event month's own file, by event month, and projects that
+  lag onto recent thin months. That share varies by period, so read it from the notebook for the month
+  you care about rather than assuming it is constant.
+- **Deferred-resignation (DRP) exits.** The notebook checks the separations `drp_indicator` field for
+  cohort departures, to rule out a buyout-program explanation.
 
-## Headline findings
-The surge was overwhelmingly **ICE** (2025: ~8× normal hiring, ~5.3× ICE's all-time prior peak of 1,966 in
-2009 — the 2017 "hire 10,000 officers" order produced nothing like it), concentrated in **Sept 2025–Jan
-2026** in **entry immigration-enforcement officer roles** (series 1801/1811, GL plan). ICE headcount grew
-~46% (20.9k→30.5k) then slipped ~5% by Jul 2026. The leavers are the surge hires themselves (see
-Method for how we identify them), and **more than 1 in 4 has already left, ~69% by voluntary quit** —
-before the cohort's first year is even up, against this same job group's own ~7%-a-year normal rate
-before the surge, and already past what comparable CBP entry classes shed over a *full* year (~10–11%),
-closing on CBP's worst rapid-hire surges (~29% in 2019–21). It isn't just fast growth: CBP's own entry
-officer jobs also grew substantially over this same window (headcount roughly doubled) without a
-comparable spike in attrition — what's different about ICE is the shape of the growth, not the growth
-itself.
+## What the analysis covers
+Read the notebook (and `memo.md`) for the numbers behind each of these.
+
+1. **Scale and timing of the surge** (§1, §1b): ICE and CBP monthly and annual hiring against their own
+   history, going back far enough to compare with earlier hiring pushes, and the share of hires that are
+   genuine new hires rather than transfers.
+2. **Whether it reached the payroll** (§2): monthly headcount for both agencies before, during, and
+   after the surge.
+3. **Who the surge hires are** (§3): job series, pay plan, grade, appointment type, and age, compared
+   with normal ICE hiring.
+4. **Who is leaving and how** (§4, §4b): departures from the surge job profile against its own hires,
+   split voluntary vs. involuntary, and by series (enforcement/removal officers vs. criminal
+   investigators). CBP's own entry classes, in normal years and in its earlier rapid-hire surge, serve as
+   benchmarks, including a control on CBP's comparable jobs over the same window.
+5. **Whether it is ICE-only** (`attrition_screen.ipynb`): FBI, then every agency subelement, using the
+   same under-1-year-tenure signal. The screen also surfaces a separate pattern of civilian agencies
+   with a hiring-freeze or downsizing signature.
+6. **Caveats** (§5): counts not people; length of service is total federal service, not time in the job;
+   involuntary exits can't be fully split between expired appointments and removals.
 
 ![Monthly new hires, ICE vs CBP](figures/monthly_hires.png)
 ![Share of the ICE surge hires who have already left](figures/cohort_exited.png)
